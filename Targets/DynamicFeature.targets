@@ -25,11 +25,16 @@
 
    <Target Name="IncludeAssets" Returns="@(Assets)">
       <ItemGroup>
-        <Assets Include="Assets\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <Assets Include="$(MSBuildProjectDirectory)\Assets\**" Link="%(RecursiveDir)%(Filename)%(Extension)" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
       </ItemGroup>
    </Target>
 
-  <Target Name="IncludeAssetFeature" BeforeTargets="Build" Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'android' ">
+  <Target Name="IncludeAssetFeature" BeforeTargets="ProcessMauiAssets" Condition=" $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'android' ">
+    <PropertyGroup>
+      <_BuildArguments>
+        TargetFramework=$(TargetFramework)
+      </_BuildArguments>
+    </PropertyGroup>
     <ItemGroup>
         <_FeatureProjectFiles Include="@(ProjectReference)" Condition=" '%(ProjectReference.DynamicFeature)' == 'true' " />
     </ItemGroup>
@@ -39,7 +44,7 @@
       SkipNonexistentTargets="true"
       Properties="$(_BuildArguments)"
     >
-      <Output TaskParameter="TargetOutputs" ItemName="MaiAsset" />
+      <Output TaskParameter="TargetOutputs" ItemName="MauiAsset" />
     </MSBuild>
   </Target>
 
