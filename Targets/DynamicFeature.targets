@@ -25,10 +25,8 @@
 
    <Target Name="IncludeAssets" Returns="@(Assets)">
       <ItemGroup>
-        <Assets Include="$(MSBuildProjectDirectory)\Assets\*">
-          <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-          <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-        </Assets>
+        <_Assets Include="$(MSBuildProjectDirectory)\Assets\*" />
+        <Assets Include="@(_Assets)" Link="%(RecursiveDir)%(Filename)%(Extension)" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
       </ItemGroup>
    </Target>
 
